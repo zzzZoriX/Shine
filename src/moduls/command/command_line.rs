@@ -52,6 +52,13 @@ use crate::{
                 args: Vec::new()
             };
         }
+
+        pub fn clone(&self) -> Self {
+            return Self {
+                has: self.has,
+                args: self.args.clone()
+            };
+        }
     }
 
     impl Output {
@@ -59,6 +66,13 @@ use crate::{
             return Self {
                 has: false,
                 arg: String::new()
+            };
+        }
+
+        pub fn clone(&self) -> Self {
+            return Self {
+                has: self.has,
+                arg: self.arg.clone()
             };
         }
     }
@@ -140,6 +154,14 @@ use crate::{
             }
 
             return Result::Ok(());
+        }
+
+        pub fn get_input(&self) -> Input {
+            return self.flags.inp.clone();
+        }
+
+        pub fn get_output(&self) -> Output {
+            return self.flags.otp.clone();
         }
 
         // pub fn dbg_print(&self) -> () {

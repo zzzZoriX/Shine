@@ -2,6 +2,7 @@ include!("./moduls/common/messages.rs");
 include!("./moduls/command/command_line.rs");
 
 use std::env;
+use std::fs::File;
 use crate::command_line::Command;
 
 fn main() {
@@ -20,4 +21,6 @@ fn main() {
         
         panic!("{}", err);
     });
+
+    
 }
