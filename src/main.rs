@@ -1,11 +1,13 @@
 include!("./moduls/common/messages.rs");
 include!("./moduls/command/command_line.rs");
+include!("./moduls/command/command_processing.rs");
+include!("./moduls/lexer/lexemes.rs");
 
-use std::env;
+use std::{env};
 use std::fs::File;
-use crate::command_line::Command;
+use crate::command_line::{CmdType, Command, Input};
 
-fn main() {
+fn main() -> Result<(), std::io::Error> {
     let mut args: Vec<String> = env::args()
                                 .skip(1) // skip call command
                                 .collect();
@@ -22,5 +24,21 @@ fn main() {
         panic!("{}", err);
     });
 
-    
+    if let CmdType::CreateNewEnv = command_line.get_type() {
+        process_new_cmd(&command_line.get_input().args[0])?;
+        return Result::Ok(());
+    }
+    else if let CmdType::ShowVersion = command_line.get_type() {
+        process_ver_cmd();
+        return Result::Ok(());
+    }
+
+    let input_files: Input = command_line.get_input();
+    for input_file in &input_files.args {
+        let ifp: File = File::open(input_file)?;
+
+        
+    }
+
+    return Result::Ok(());
 }
