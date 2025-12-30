@@ -139,6 +139,10 @@ use crate::{
                 else {
                     if let Some(ParseStatus::Input) = read_status {
                         self.flags.inp.args.push(String::clone(arg));
+
+                        if let CmdType::CreateNewEnv = self.cmd_type {
+                            return Result::Ok(());
+                        }
                     }
                     else if let Some(ParseStatus::Output) = read_status {
                         if self.flags.otp.arg.len() > 0 {
@@ -162,6 +166,10 @@ use crate::{
 
         pub fn get_output(&self) -> Output {
             return self.flags.otp.clone();
+        }
+
+        pub fn get_type(&self) -> &CmdType {
+            return &self.cmd_type;
         }
 
         // pub fn dbg_print(&self) -> () {
