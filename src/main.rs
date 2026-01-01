@@ -1,4 +1,3 @@
-include!("./moduls/common/messages.rs");
 include!("./moduls/command/command_line.rs");
 include!("./moduls/command/command_processing.rs");
 include!("./moduls/lexer/lexemes.rs");
@@ -14,7 +13,7 @@ fn main() -> Result<(), std::io::Error> {
                                 .collect();
 
     if args.len() < 1 {
-        panic!("{}", TOO_FEW_ARGS);
+        panic!("Too few arguments...\nExample of correct use: shine compile -i <input_file> -o <output_use>");
     }
 
     let mut command_line: Command = Command::new(); 
