@@ -1,33 +1,36 @@
 mod tokens {
-    use crate::Lexeme;
+    use crate::Lexeme as TokenLexeme;
 
-    pub struct Token<D> {
-        value: Option<D>,
-        tok_type: Lexeme
+    pub struct Token {
+        value: Option<String>,
+        tok_type: TokenLexeme
     }
 
-    impl<D> Token<D> {
+    impl Token {
         pub fn new() -> Self {
             return Self {
                 value: None,
-                tok_type: Lexeme::LexUndef
+                tok_type: TokenLexeme::LexUndef
             };
         }
 
-        pub fn create(value: Option<D>, tok_type: Lexeme) -> Self {
-            return Self {
-                value, tok_type
-            };
+        pub fn create(value: Option<&String>, tok_type: TokenLexeme) -> Self {
+            match value {
+                Some(v) => return Self {
+                    value: Some(v.clone()), tok_type
+                },
+                None => return Self::new()
+            }
         }
         
-        pub fn get_value(&self) -> Option<&D> {
+        pub fn get_value(&self) -> Option<&String> {
             match &self.value {
                 Some(value) => return Some(value),
                 None => return None
             }
         }
 
-        pub fn get_type(&self) -> &Lexeme {
+        pub fn get_type(&self) -> &TokenLexeme {
             return &self.tok_type;
         }
     }

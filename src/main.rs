@@ -2,8 +2,9 @@ include!("./moduls/common/messages.rs");
 include!("./moduls/command/command_line.rs");
 include!("./moduls/command/command_processing.rs");
 include!("./moduls/lexer/lexemes.rs");
+include!("./moduls/lexer/lexer.rs");
 
-use std::{env};
+use std::env;
 use std::fs::File;
 use crate::command_line::{CmdType, Command, Input};
 
@@ -35,9 +36,12 @@ fn main() -> Result<(), std::io::Error> {
 
     let input_files: Input = command_line.get_input();
     for input_file in &input_files.args {
-        let ifp: File = File::open(input_file)?;
-
-        
+        let tokens: Vec<Token> = tokenize(input_file).unwrap_or_else(|err|{
+            match err {
+                LexerResult::ShineError(serr) => panic!("{}", serr),
+                LexerResult::StdIoError(ioerr) => panic!("{}", ioerr)
+            }
+        });
     }
 
     return Result::Ok(());
