@@ -1,0 +1,15 @@
+struct Test {
+    var s32 a;
+    var s32 b;
+}
+
+decl: fun s32 sum(var s32 a, var s32 b);
+
+fun s32 main() {
+    var struct::Test t = :;
+    var s32 result = call: sum(t::a, t::b);
+}
+
+impl: fun s32 sum(var s32 a, var s32 b) {
+    return: a + b;
+}
