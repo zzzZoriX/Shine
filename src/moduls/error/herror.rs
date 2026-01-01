@@ -1,52 +1,26 @@
 pub mod error {
-    pub enum ShineErrorType {
-        CommandLineError,
-        LexerError,
-        ParserError,
-        SyntaxError,
-        LogicError,
-        CodeGeneratorError,
-        StdIOError
-    }
     pub enum Error {
-        ShineError(ShineErrorType, String),
+        CommandLineError(String),
+        LexerError(String, u16, u16),
+        ParserError(String),
+        SyntaxError(String),
+        LogicError(String),
+        CodeGeneratorError(String),
+        StdIOError(String)
     }
 
 //  NoReturn function
     pub fn process_error(err: Error) -> ! {
         match err {
-            Error::ShineError(etype, msg) => {
-                match etype {
-                    ShineErrorType::CommandLineError => {
-                        eprint!("Console command error:\n{}", msg);
-                        std::process::exit(1);
-                    },
-                    ShineErrorType::LexerError => {
-                        eprint!("Lexer error:\n{}", msg);
-                        std::process::exit(1);
-                    },
-                    ShineErrorType::ParserError => {
-                        eprint!("Tokens parser error:\n{}", msg);
-                        std::process::exit(1);
-                    },
-                    ShineErrorType::SyntaxError => {
-                        eprint!("Syntax error:\n{}", msg);
-                        std::process::exit(1);
-                    },
-                    ShineErrorType::LogicError => {
-                        eprint!("Logic error:\n{}", msg);
-                        std::process::exit(1);
-                    },
-                    ShineErrorType::CodeGeneratorError => {
-                        eprint!("Error occurred while code generating:\n{}", msg);
-                        std::process::exit(1);
-                    },
-                    ShineErrorType::StdIOError => {
-                        eprint!("std::io error:\n{}", msg);
-                        std::process::exit(1);
-                    }
-                }
-            }
+            Error::CommandLineError(msg) => print!("{}", msg),
+            Error::LexerError(msg, row, col) => print!("{}.{}: {}", row, col, msg),
+            Error::ParserError(msg) => print!("{}", msg),
+            Error::SyntaxError(msg) => print!("{}", msg),
+            Error::LogicError(msg) => print!("{}", msg),
+            Error::CodeGeneratorError(msg) => print!("{}", msg),
+            Error::StdIOError(msg) => print!("{}", msg)
         }
+
+        std::process::exit(1);
     }
 }

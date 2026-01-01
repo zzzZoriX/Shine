@@ -48,6 +48,7 @@ pub enum Lexeme {
     LexDot,                 // .
     LexComma,               // ,
     LexSemic,               // ;
+    LexArrow,               // ->
 
 /*  Spec Words      */
     LexFunction,

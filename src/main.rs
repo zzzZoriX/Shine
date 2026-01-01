@@ -14,9 +14,11 @@ fn main() {
                                 .collect();
 
     if args.len() < 1 {
-        error::process_error(error::Error::ShineError(
-            error::ShineErrorType::CommandLineError, 
-            String::from("Too few arguments...\nxample of correct use: shine compile -i <input_file> -o <output_use>")
+        error::process_error(error::Error::CommandLineError(
+            String::from(
+"Too few arguments...
+Example of correct use: shine compile -i <input_file> -o <output_use>"
+            )
         ));
     }
 

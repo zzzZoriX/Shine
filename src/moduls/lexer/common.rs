@@ -44,6 +44,7 @@ pub fn define_lexeme_by_word(word: &String) -> LexemeCMN {
     if word == "."          { return LexemeCMN::LexDot; }
     if word == ","          { return LexemeCMN::LexComma; }
     if word == ";"          { return LexemeCMN::LexSemic; }
+    if word == "->"         { return LexemeCMN::LexArrow; }
     if word == "fun"        { return LexemeCMN::LexFunction; }
     if word == "struct"     { return LexemeCMN::LexStruct; }
     if word == "var"        { return LexemeCMN::LexVar; }
@@ -95,7 +96,8 @@ pub fn is_spec_symbol(c: &char) -> bool {
         *c == '\''  ||
         *c == '.'   ||
         *c == ','   ||
-        *c == ';'
+        *c == ';'   ||
+        *c == '\n'
     ;
 }
 
