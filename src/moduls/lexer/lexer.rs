@@ -5,18 +5,23 @@ use std::io::Read;
 use crate::tokens::Token;
 
 
-enum LexerResult {
-    StdIoError(std::io::Error),
-    ShineError(String)
-}
-
-fn tokenize(input_file_path: &String) -> Result<Vec<Token>, LexerResult> {
-    let mut ifp = File::open(input_file_path).map_err(LexerResult::StdIoError)?;
+fn tokenize(input_file_path: &String) -> Result<Vec<Token>, error::Error> {
+    let mut ifp = File::open(input_file_path).unwrap_or_else(|_|{
+        error::process_error(error::Error::ShineError(
+            error::ShineErrorType::LexerError,
+            format!("Can't open input file: {}", input_file_path
+        )));
+    });
     let mut buffer: String = String::new();
     let mut word_buffer: String = String::new();
     let mut tokens_vec: Vec<Token> = Vec::new();
 
-    File::read_to_string(&mut ifp, &mut buffer).map_err(LexerResult::StdIoError)?;
+    File::read_to_string(&mut ifp, &mut buffer).unwrap_or_else(|_|{
+        error::process_error(error::Error::ShineError(
+            error::ShineErrorType::LexerError,
+            format!("Can't open input file: {}", input_file_path
+        )));
+    });
 
     if buffer.len() < 1 {
         return Result::Ok(tokens_vec);
@@ -29,7 +34,8 @@ fn tokenize(input_file_path: &String) -> Result<Vec<Token>, LexerResult> {
             if ch == ' ' {
                 let lexeme: Lexeme = define_lexeme_by_word(&word_buffer);
                 if let Lexeme::LexUndef = lexeme {
-                    return Result::Err(LexerResult::ShineError(
+                    return Result::Err(error::Error::ShineError(
+                        error::ShineErrorType::LexerError,
                         format!("Unknown word: {}", word_buffer)
                     ));
                 }
@@ -45,9 +51,10 @@ fn tokenize(input_file_path: &String) -> Result<Vec<Token>, LexerResult> {
             else {
                 let mut lexeme: Lexeme = define_lexeme_by_word(&word_buffer);
                 if let Lexeme::LexUndef = lexeme {
-                    return Result::Err(LexerResult::ShineError(String::from(
+                    return Result::Err(error::Error::ShineError(
+                        error::ShineErrorType::LexerError,
                         format!("Unknown word: {}", word_buffer)
-                    )));
+                    ));
                 }
 
                 tokens_vec.push(Token::create(
@@ -77,9 +84,10 @@ fn tokenize(input_file_path: &String) -> Result<Vec<Token>, LexerResult> {
 
                 lexeme = define_lexeme_by_word(&word_buffer);
                 if let Lexeme::LexUndef = lexeme {
-                    return Result::Err(LexerResult::ShineError(String::from(
+                    return Result::Err(error::Error::ShineError(
+                        error::ShineErrorType::LexerError,
                         format!("Unknown word: {}", word_buffer)
-                    )));
+                    ));
                 }
 
                 tokens_vec.push(Token::create(
