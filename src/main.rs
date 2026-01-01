@@ -9,7 +9,7 @@ use std::fs::File;
 use crate::command_line::{CmdType, Command, Input};
 
 fn main() {
-    let mut args: Vec<String> = env::args()
+    let args: Vec<String> = env::args()
                                 .skip(1) // skip call command
                                 .collect();
 
@@ -25,13 +25,13 @@ Example of correct use: shine compile -i <input_file> -o <output_use>"
     let mut command_line: Command = Command::new(); 
 
     command_line.parse(&args).unwrap_or_else(|err|{
-        args.clear();
-        
-        panic!("{}", err);
+        error::process_error(error::Error::CommandLineError(
+            err
+        ));
     });
 
     if let CmdType::CreateNewEnv = command_line.get_type() {
-        process_new_cmd(&command_line.get_input().args[0]);
+        process_new_cmd(&command_line.get_output().arg);
         return;
     }
     else if let CmdType::ShowVersion = command_line.get_type() {

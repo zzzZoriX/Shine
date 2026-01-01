@@ -36,7 +36,8 @@ use crate::{
 
     enum ParseStatus {
         Input,
-        Output
+        Output,
+        EnvName
     }
 
     pub struct Command {
@@ -125,7 +126,7 @@ use crate::{
                 else if arg == NEW_CMD {
                     self.cmd_type = CmdType::CreateNewEnv;
 
-                    return Result::Ok(());
+                    read_status = Some(ParseStatus::EnvName);
                 }
 
                 else if arg == COMP_CMD {
@@ -150,6 +151,11 @@ use crate::{
                         }
 
                         self.flags.otp.arg = String::clone(arg);
+                    }
+                    else if let Some(ParseStatus::EnvName) = read_status {
+                        self.flags.otp.arg = arg.clone();
+
+                        return Result::Ok(());
                     }
                     else {
                         return Result::Err(format!("Unexpected file: {}", arg));
