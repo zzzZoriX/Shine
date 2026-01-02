@@ -44,80 +44,121 @@ fn tokenize(input_file_path: &String) -> Result<Vec<Token>, error::Error> {
         }
 
         if is_spec_symbol(&ch) {
-            if ch == ' ' {
-                let lexeme: Lexeme = define_lexeme_by_word(&word_buffer);
-                if let Lexeme::LexUndef = lexeme {
-                    return Result::Err(error::Error::LexerError(
-                        format!("Unknown word: {}", word_buffer),
-                        row,
-                        column
-                    ));
-                }
-
+            if !word_buffer.is_empty() {
                 tokens_vec.push(Token::create(
                     Some(&word_buffer),
-                    lexeme
+                    define_lexeme_by_word(&word_buffer)
                 ));
 
                 word_buffer.clear();
             }
 
-            else {
-                let mut lexeme: Lexeme = define_lexeme_by_word(&word_buffer);
-                if let Lexeme::LexUndef = lexeme {
-                    return Result::Err(error::Error::LexerError(
-                        format!("Unknown word: {}", word_buffer),
-                        row,
-                        column
-                    ));
+            if ch == ' ' {
+                column += 1;
+                continue;
+            }
+
+            match ch {
+                ' ' => {
+                    column += 1;
+                    continue;
                 }
-
-                tokens_vec.push(Token::create(
-                    Some(&word_buffer),
-                    lexeme
-                ));
-
-                word_buffer.clear();
-                word_buffer.push(ch);
-                 
-                if ch == ':' {
-                    if let Some(&next) = chars.peek() {
-                        if next == ':' {
+                ':' => {
+                    if let Some(&n) = chars.peek() {
+                        if n == ':' {
                             chars.next();
-                            word_buffer.push(next);
-                        }
-                    }
-                }
 
-                if ch == '-' {
-                    if let Some(&next) = chars.peek() {
-                        if next.is_digit(10) {
-                            column += 1;
+                            tokens_vec.push(Token::create(
+                                Some(&String::from("::")),
+                                Lexeme::LexDblTwoDots
+                            ));
+
+                            column += 2;
                             continue;
                         }
                     }
-                }
 
-                lexeme = define_lexeme_by_word(&word_buffer);
-                if let Lexeme::LexUndef = lexeme {
-                    return Result::Err(error::Error::LexerError(
-                        format!("Unknown word: {}", word_buffer),
-                        row,
-                        column
+                    tokens_vec.push(Token::create(
+                        Some(&String::from(':')),
+                        Lexeme::LexTwoDots
                     ));
                 }
+                '-' | '+' | '|' | '&' => {
+                    word_buffer.push(ch);
 
-                tokens_vec.push(Token::create(
-                    Some(&word_buffer),
-                    lexeme
-                ));
+                    if let Some(&n) = chars.peek() {
+                        if n == word_buffer.chars().nth(0).unwrap() {
+                            chars.next();
+                            word_buffer.push(n);
 
-                word_buffer.clear();
+                            tokens_vec.push(Token::create(
+                                Some(&word_buffer),
+                                define_lexeme_by_word(&word_buffer)
+                            ));
+    
+                            column += 2;
+                            continue;
+                        }
+                        if n == '=' {
+                            chars.next();
+
+                            word_buffer.push(n);
+
+                            tokens_vec.push(Token::create(
+                                Some(&word_buffer),
+                                define_lexeme_by_word(&word_buffer)
+                            ));
+
+                            column += 2;
+                            continue;
+                        }
+                    }
+
+                    tokens_vec.push(Token::create(
+                        Some(&word_buffer),
+                        define_lexeme_by_word(&word_buffer)
+                    ));
+                }
+                '*' | '/' | '%' | '^' => {
+                    word_buffer.push(ch);
+
+                    if let Some(&n) = chars.peek() {
+                        if n == '=' {
+                            chars.next();
+                            word_buffer.push(n);
+
+                            tokens_vec.push(Token::create(
+                                Some(&word_buffer),
+                                define_lexeme_by_word(&word_buffer)
+                            ));
+
+                            word_buffer.clear();
+
+                            column += 2;
+                            continue;
+                        }
+                    }
+
+                    tokens_vec.push(Token::create(
+                        Some(&word_buffer),
+                        define_lexeme_by_word(&word_buffer)
+                    ));
+
+                    word_buffer.clear();
+                }
+                _ => {
+                    word_buffer.push(ch);
+
+                    tokens_vec.push(Token::create(
+                        Some(&word_buffer),
+                        define_lexeme_by_word(&word_buffer)
+                    ));
+
+                    word_buffer.clear();
+                }
             }
-        }
 
-        else {
-            word_buffer.push(ch);
+            column += 1;
         }
 
         column += 1;

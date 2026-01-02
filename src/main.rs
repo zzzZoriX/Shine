@@ -44,9 +44,5 @@ Example of correct use: shine compile -i <input_file> -o <output_use>"
         let tokens: Vec<Token> = tokenize(input_file).unwrap_or_else(|err|{
             error::process_error(err);
         });
-
-        for tok in &tokens {
-            println!("{}", tok.get_value().unwrap());
-        }
     }
 }
