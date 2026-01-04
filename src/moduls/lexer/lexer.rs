@@ -157,8 +157,9 @@ fn tokenize(input_file_path: &String) -> Result<Vec<Token>, error::Error> {
                     word_buffer.clear();
                 }
             }
-
-            column += 1;
+        }
+        else {
+            word_buffer.push(ch);
         }
 
         column += 1;
