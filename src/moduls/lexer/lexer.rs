@@ -38,9 +38,15 @@ fn tokenize(input_file_path: &String) -> Result<Vec<Token>, error::Error> {
     column = 1;
 
     while let Some(ch) = chars.next() {
+        if ch == '\r' {
+            continue;
+        }
+
         if ch == '\n' {
             row += 1;
             column = 1;
+
+            continue;
         }
 
         if is_spec_symbol(&ch) {
@@ -51,11 +57,6 @@ fn tokenize(input_file_path: &String) -> Result<Vec<Token>, error::Error> {
                 ));
 
                 word_buffer.clear();
-            }
-
-            if ch == ' ' {
-                column += 1;
-                continue;
             }
 
             match ch {
@@ -96,6 +97,8 @@ fn tokenize(input_file_path: &String) -> Result<Vec<Token>, error::Error> {
                                 define_lexeme_by_word(&word_buffer)
                             ));
     
+                            word_buffer.clear();
+
                             column += 2;
                             continue;
                         }
@@ -108,6 +111,8 @@ fn tokenize(input_file_path: &String) -> Result<Vec<Token>, error::Error> {
                                 Some(&word_buffer),
                                 define_lexeme_by_word(&word_buffer)
                             ));
+
+                            word_buffer.clear();
 
                             column += 2;
                             continue;
@@ -164,6 +169,6 @@ fn tokenize(input_file_path: &String) -> Result<Vec<Token>, error::Error> {
 
         column += 1;
     }
-    
+
     return Result::Ok(tokens_vec);
 }

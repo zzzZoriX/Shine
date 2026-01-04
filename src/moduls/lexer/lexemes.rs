@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub enum Lexeme {
 /*  Bin Op's        */
     LexPlus,
