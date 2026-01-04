@@ -3,10 +3,11 @@ include!("./moduls/command/command_processing.rs");
 include!("./moduls/lexer/lexemes.rs");
 include!("./moduls/lexer/lexer.rs");
 include!("./moduls/error/herror.rs");
+include!("./moduls/lexer/syntax_checker.rs");
 
 use std::env;
 use std::fs::File;
-use crate::command_line::{CmdType, Command, Input};
+use crate::{command_line::{CmdType, Command, Input}, error::process_error};
 
 fn main() {
     let args: Vec<String> = env::args()
@@ -44,5 +45,10 @@ Example of correct use: shine compile -i <input_file> -o <output_use>"
         let tokens: Vec<Token> = tokenize(input_file).unwrap_or_else(|err|{
             error::process_error(err);
         });
+
+        match check_syntax(&tokens) {
+            None => {},
+            Some(e) => process_error(e)
+        }
     }
 }
