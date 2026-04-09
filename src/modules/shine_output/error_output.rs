@@ -1,16 +1,16 @@
-mod error_output {
-    use crate::modules::shine_output::output::{Color, Output};
-    use colored::Colorize;
+pub mod error_output {
+    use crate::modules::shine_output::output::*;
 
     pub struct Error;
-    impl Output for Error {
-        fn output(msg: String, color: Color) {
-            match color {
-                Color::Red => println!("{}", msg.red()),
-                Color::Green => println!("{}", msg.green()),
-                Color::Yellow => println!("{}", msg.yellow()),
-                Color::White => println!("{}", msg)
-            }
+    pub trait ErrorOutput {
+        fn abort(msg: String, code: i8);
+    }
+
+    impl ErrorOutput for Error {
+        fn abort(msg: String, code: i8) {
+            Output::output(msg, Color::Red);
+
+            std::process::exit(code as i32);
         }
     }
 }

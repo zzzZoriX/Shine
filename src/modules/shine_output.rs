@@ -1,2 +1,2 @@
 pub mod error_output;
-mod output;
+pub mod output;
