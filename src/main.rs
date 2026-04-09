@@ -1,7 +1,7 @@
 mod modules;
 
 use modules::shine_output::error_output::error_output::{ErrorOutput, Error};
-use modules::shine_input::command_line::*;
+use modules::shine_input::{command_line::*, commands_handler::*};
 use std::env;
 
 fn main(){
@@ -14,4 +14,6 @@ fn main(){
     }
     
     let user_input: Input = Input::parse_command_line(args.clone());
+
+    handle_command(&user_input);
 }

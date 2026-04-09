@@ -33,7 +33,7 @@ impl input for Input {
         let command: String = cmd[0].clone();
 
 
-        for word in cmd {
+        for word in cmd.iter().skip(1) {
             if is_command(&word) {
                 Error::abort(String::from("Unexpected command"), -3);
             }
@@ -51,7 +51,7 @@ impl input for Input {
                     Error::abort(String::from("Multiply output file defining!"), 2);
                 }
 
-                output = word;
+                output = word.clone();
 
                 stats.output_set = true;
             }
