@@ -1,5 +1,5 @@
 pub enum Lexeme {
-
+    
 }
 
 pub struct Token<'a> {
