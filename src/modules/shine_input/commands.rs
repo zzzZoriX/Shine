@@ -1,9 +1,9 @@
-const L_VERSION: &str = "?version";
-const S_VERSION: &str = "?v";
-const L_HELP: &str = "?help";
-const S_HELP: &str = "?h";
-const L_BUILD: &str = "?build";
-const S_BUILD: &str = "?b";
+pub const L_VERSION: &str = "?version";
+pub const S_VERSION: &str = "?v";
+pub const L_HELP: &str = "?help";
+pub const S_HELP: &str = "?h";
+pub const L_BUILD: &str = "?build";
+pub const S_BUILD: &str = "?b";
 
 
 pub fn is_command(word: &String) -> bool {
