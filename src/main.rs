@@ -1,7 +1,7 @@
 mod modules;
 
 use modules::shine_output::error_output::error_output::{ErrorOutput, Error};
-use modules::command_line::command_line::command_line::*;
+use modules::shine_input::command_line::*;
 use std::env;
 
 fn main(){
