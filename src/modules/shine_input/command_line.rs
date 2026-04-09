@@ -1,6 +1,5 @@
-use crate::modules::shine_input::commands;
 use crate::modules::shine_input::commands::*;
-use crate::modules::shine_output::error_output::error_output::{ErrorOutput, Error};
+use crate::modules::shine_output::error_output::{ErrorOutput, Error};
 
 
 pub struct Flags {
