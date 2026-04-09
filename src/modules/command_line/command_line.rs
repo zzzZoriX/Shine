@@ -9,9 +9,9 @@ pub mod command_line {
         output_f: bool
     }
     pub struct Input {
-        inputs: Vec<String>,
-        output: String,
-        flags: Flags
+        pub inputs: Vec<String>,
+        pub output: String,
+        pub flags: Flags
     }
     pub trait input {
         fn parse_command_line(cmd: Vec<String>) -> Input;
