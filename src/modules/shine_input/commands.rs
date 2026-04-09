@@ -4,6 +4,20 @@ pub const L_HELP: &str = "?help";
 pub const S_HELP: &str = "?h";
 pub const L_BUILD: &str = "?build";
 pub const S_BUILD: &str = "?b";
+pub const S_OTP_FLAG: &str = "-o";
+pub const L_OTP_FLAG: &str = "-output";
+
+pub const HELP_INFO: &str = "Available commands:\
+  ?h | ?help    -- show this info message\
+  ?v | ?version -- show current version of shine\
+  ?b | ?build   -- compile all pointed .ne files\
+  \
+Available flags:\
+  -o | -output  -- tell Shine that next file is an output\
+  \
+Shine source files extension: .ne\
+Shine creator: zorix (github: https://github.com/zzzZoriX )";
+pub const SHINE_VERSION: &str = "v0.01";
 
 
 pub fn is_command(word: &String) -> bool {

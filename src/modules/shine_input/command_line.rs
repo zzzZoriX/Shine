@@ -1,9 +1,6 @@
 use crate::modules::shine_input::commands;
-use crate::modules::shine_input::commands::is_command;
+use crate::modules::shine_input::commands::*;
 use crate::modules::shine_output::error_output::error_output::{ErrorOutput, Error};
-
-pub const S_OTP_FLAG: &str = "-o";
-pub const L_OTP_FLAG: &str = "-output";
 
 
 pub struct Flags {
@@ -28,20 +25,20 @@ impl input for Input {
         let mut output: String = "shine_new".to_string();
         let mut flags: Flags = Flags{output_f: false};
         let mut stats: parse_stats = parse_stats{output_set: false};
-        
+
         if !is_command(&cmd[0]) {
             Error::abort("Unknown command".to_string(), -2);
         }
-        
+
         let command: String = cmd[0].clone();
-        
+
 
         for word in cmd {
             if is_command(&word) {
                 Error::abort(String::from("Unexpected command"), -3);
             }
-           
-            
+
+
             if word.contains(".ne") {
                 if flags.output_f {
                     Error::abort(String::from("Input files defining after output flag!"), 1);
