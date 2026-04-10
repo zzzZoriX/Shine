@@ -1,6 +1,4 @@
-pub enum Lexeme {
-
-}
+use crate::modules::shine_core::lexemes::*;
 
 pub struct Token<'a> {
     pub value: String,
@@ -19,17 +17,13 @@ impl<'a> Token<'a> {
     pub fn new(word: &String, next_token: &Option<Box<Token>>) -> Token<'a> {
         Token {
             value: word.clone(),
-            lexeme: TokensList::define_lexeme(word),
+            lexeme: define_lexeme(word),
             next: Some(&mut next_token.unwrap())
         }
     }
 }
 
 impl<'a> TokensList<'a> {
-    fn define_lexeme(value: &String) -> Lexeme {
-        todo!()
-    }
-
     pub fn add(&mut self, word: &String) {
         let mut new_token = Box::new(Token::new(
             word, &None
