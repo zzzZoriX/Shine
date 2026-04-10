@@ -1,5 +1,5 @@
 pub enum Lexeme {
-    
+
 }
 
 pub struct Token<'a> {
@@ -16,7 +16,7 @@ pub struct TokensList<'a> {
 
 
 impl<'a> Token<'a> {
-    pub fn new(word: &String, next_token: Option<Box<Token>>) -> Token<'a> {
+    pub fn new(word: &String, next_token: &Option<Box<Token>>) -> Token<'a> {
         Token {
             value: word.clone(),
             lexeme: TokensList::define_lexeme(word),
@@ -32,7 +32,7 @@ impl<'a> TokensList<'a> {
 
     pub fn add(&mut self, word: &String) {
         let mut new_token = Box::new(Token::new(
-            word, None
+            word, &None
         ));
 
         if self.head.is_none() {
