@@ -23,6 +23,13 @@ impl Token {
 }
 
 impl TokensList {
+    pub fn new() -> Self {
+        Self {
+            head: None,
+            size: 0
+        }
+    }
+    
     pub fn add(&mut self, word: &String) {
         let new_token = Box::new(Token::new(
             word, None
