@@ -2,7 +2,7 @@ use crate::modules::shine_core::lexemes::*;
 
 pub struct Token {
     pub value: String,
-    pub lexeme: Lexeme,
+    pub lexeme: &'static Lexeme,
     pub next: Option<Box<Token>>,
 }
 
