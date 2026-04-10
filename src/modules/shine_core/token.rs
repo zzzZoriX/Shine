@@ -1,49 +1,57 @@
 use crate::modules::shine_core::lexemes::*;
 
-pub struct Token<'a> {
+pub struct Token {
     pub value: String,
     pub lexeme: Lexeme,
-    pub next: Option<&'a mut Box<Token<'a>>>,
+    pub next: Option<Box<Token>>,
 }
 
-pub struct TokensList<'a> {
-    pub head: Option<&'a mut Box<Token<'a>>>,
-    pub tail: Option<&'a mut Box<Token<'a>>>,
+pub struct TokensList {
+    pub head: Option<Box<Token>>,
     pub size: usize
 }
 
 
-impl<'a> Token<'a> {
-    pub fn new(word: &String, next_token: &Option<Box<Token>>) -> Token<'a> {
+impl Token {
+    pub fn new(word: &String, next_token: Option<Box<Token>>) -> Token {
         Token {
             value: word.clone(),
             lexeme: define_lexeme(word),
-            next: Some(&mut next_token.unwrap())
+            next: next_token
         }
     }
 }
 
-impl<'a> TokensList<'a> {
+impl TokensList {
     pub fn add(&mut self, word: &String) {
-        let mut new_token = Box::new(Token::new(
-            word, &None
+        let new_token = Box::new(Token::new(
+            word, None
         ));
 
-        if self.head.is_none() {
-            self.head = Some(&mut new_token);
-        }
+        match self.head.as_mut() {
+            None => self.head = Some(new_token),
+            Some(mut current) => {
+                while let Some(ref mut next) = current.next {
+                    current = next;
+                }
 
-        self.tail.unwrap().next = Some(&mut new_token);
-        self.tail = Some(&mut new_token);
+                current.next = Some(new_token);
+            }
+        }
 
         self.size += 1;
     }
 
-    pub fn take(&self) -> &Option<&'a mut Box<Token<'a>>> {
-        &self.tail
-    }
+    pub fn take(&mut self) -> Option<&mut Box<Token>> {
+        match self.head.as_mut() {
+            None => None,
+            Some(mut current) => {
+                while let Some(ref mut next) = current.next {
+                    current = next;
+                }
 
-    pub fn take_mut(&mut self) -> &mut Option<&'a mut Box<Token<'a>>> {
-        &mut self.tail
+                Some(current)
+            }
+        }
     }
 }
